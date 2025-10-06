@@ -14,12 +14,12 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const app = express();
 
 const port = process.env.PORT || 3001;
-const origin = process.env.ORIGIN || 'http://localhost:5173';
+const origin = process.env.ORIGIN || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:5173');
 const openRouterKey = process.env.OPENROUTER_API_KEY;
 
 if (!openRouterKey) {
   // eslint-disable-next-line no-console
-  console.warn('\n[WARN] OPENROUTER_API_KEY is not set. Set it in backend/.env before starting the server.');
+  console.warn('\n[WARN] OPENROUTER_API_KEY is not set. Set it in environment variables.');
 }
 
 app.use(morgan('dev'));
@@ -27,13 +27,21 @@ app.use(cors({ origin, credentials: false }));
 app.use(express.json({ limit: '1mb' }));
 
 // Serve static files from frontend/dist in production
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
   const frontendDistPath = path.resolve(__dirname, '../../frontend/dist');
   app.use(express.static(frontendDistPath));
 }
 
 app.get('/health', (req, res) => {
   res.json({ ok: true, service: 'openrouter-proxy', time: new Date().toISOString() });
+});
+
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Alpha Chat API is running!', 
+    endpoints: ['/health', '/api/chat'],
+    time: new Date().toISOString() 
+  });
 });
 
 app.post('/api/chat', async (req, res) => {
@@ -87,7 +95,7 @@ app.post('/api/chat', async (req, res) => {
 });
 
 // Catch-all handler for SPA routing in production
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
   app.get('*', (req, res) => {
     const frontendDistPath = path.resolve(__dirname, '../../frontend/dist');
     res.sendFile(path.join(frontendDistPath, 'index.html'));

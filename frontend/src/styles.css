@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  height: 100%;
+}
+
+/* Base document styling */
+body {
+  background: #F1EFE3; /* sand-100 */
+  color: #1C1917; /* stone-900 */
+  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth minimalist scrollbar */
+.nice-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+.nice-scrollbar::-webkit-scrollbar-track {
+  background: rgba(185, 162, 133, 0.18); /* sand-500 at 18% */
+  border-radius: 9999px;
+}
+.nice-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(122, 139, 132, 0.55); /* sage-500 at 55% */
+  border-radius: 9999px;
+}
+.nice-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(122, 139, 132, 0.75);
+}
+
+/* Safe-area padding for mobile */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+

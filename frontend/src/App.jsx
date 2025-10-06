@@ -3,6 +3,10 @@ import axios from 'axios'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
+// Configure axios base URL for production
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? '' : '');
+axios.defaults.baseURL = API_BASE_URL;
+
 const LOCAL_STORAGE_KEY = 'openrouter_chat_history_v1'
 const LOCAL_STORAGE_SETTINGS = 'openrouter_chat_settings_v1'
 
